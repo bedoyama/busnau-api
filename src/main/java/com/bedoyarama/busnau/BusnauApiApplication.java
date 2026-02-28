@@ -9,12 +9,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class BusnauApiApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(BusnauApiApplication.class, args);
-	}
+  public static void main(String[] args) {
+    SpringApplication.run(BusnauApiApplication.class, args);
+  }
 
-	@GetMapping("/")
-	public String home() {
-		return "Welcome to the Busnau API!";
-	}
+  @GetMapping("/")
+  public String home() {
+    return "Welcome to the Busnau API!";
+  }
 }

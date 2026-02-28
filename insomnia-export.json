@@ -1,0 +1,121 @@
+{
+  "_type": "export",
+  "__export_format": 4,
+  "__export_date": "2026-02-27T00:00:00.000Z",
+  "__export_source": "busnau-api:v1.0.0",
+  "resources": [
+    {
+      "_id": "wrk_001",
+      "_type": "workspace",
+      "name": "Busnau API",
+      "description": "Task Manager API workspace"
+    },
+    {
+      "_id": "env_001",
+      "_type": "environment",
+      "name": "Local Dev",
+      "data": {
+        "api_username": "user",
+        "api_password": "1014813b-9286-4805-a9a1-a5a562177273",
+        "base_url": "http://localhost:8080"
+      },
+      "parentId": "wrk_001"
+    },
+    {
+      "_id": "req_001",
+      "_type": "request",
+      "name": "Create User",
+      "method": "POST",
+      "url": "{{base_url}}/api/users",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"username\": \"{{api_username}}\",\n  \"password\": \"{{api_password}}\",\n  \"role\": \"USER\"\n}"
+      },
+      "parentId": "wrk_001"
+    },
+    {
+      "_id": "req_002",
+      "_type": "request",
+      "name": "Get User by ID",
+      "method": "GET",
+      "url": "{{base_url}}/api/users/1",
+      "parentId": "wrk_001"
+    },
+    {
+      "_id": "req_003",
+      "_type": "request",
+      "name": "Get User by Username",
+      "method": "GET",
+      "url": "{{base_url}}/api/users/username/{{api_username}}",
+      "parentId": "wrk_001"
+    },
+    {
+      "_id": "req_004",
+      "_type": "request",
+      "name": "Get All Users",
+      "method": "GET",
+      "url": "{{base_url}}/api/users",
+      "parentId": "wrk_001"
+    },
+    {
+      "_id": "req_005",
+      "_type": "request",
+      "name": "Delete User",
+      "method": "DELETE",
+      "url": "{{base_url}}/api/users/1",
+      "parentId": "wrk_001"
+    },
+    {
+      "_id": "req_006",
+      "_type": "request",
+      "name": "Create Task",
+      "method": "POST",
+      "url": "{{base_url}}/api/tasks",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"title\": \"Sample Task\",\n  \"description\": \"This is a sample task\",\n  \"dueDate\": \"2026-03-01\",\n  \"completed\": false,\n  \"userId\": 1\n}"
+      },
+      "parentId": "wrk_001"
+    },
+    {
+      "_id": "req_007",
+      "_type": "request",
+      "name": "Get Task by ID",
+      "method": "GET",
+      "url": "{{base_url}}/api/tasks/1",
+      "parentId": "wrk_001"
+    },
+    {
+      "_id": "req_008",
+      "_type": "request",
+      "name": "Get All Tasks",
+      "method": "GET",
+      "url": "{{base_url}}/api/tasks",
+      "parentId": "wrk_001"
+    },
+    {
+      "_id": "req_009",
+      "_type": "request",
+      "name": "Get Tasks by User ID",
+      "method": "GET",
+      "url": "{{base_url}}/api/tasks/user/1",
+      "parentId": "wrk_001"
+    },
+    {
+      "_id": "req_010",
+      "_type": "request",
+      "name": "Get Tasks by Completed Status",
+      "method": "GET",
+      "url": "{{base_url}}/api/tasks/completed/false",
+      "parentId": "wrk_001"
+    },
+    {
+      "_id": "req_011",
+      "_type": "request",
+      "name": "Delete Task",
+      "method": "DELETE",
+      "url": "{{base_url}}/api/tasks/1",
+      "parentId": "wrk_001"
+    }
+  ]
+}
