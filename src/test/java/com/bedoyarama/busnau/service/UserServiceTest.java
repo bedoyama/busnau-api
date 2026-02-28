@@ -53,7 +53,7 @@ class UserServiceTest {
     when(userRepository.save(any(User.class))).thenReturn(user);
 
     // When
-    User savedUser = userService.save(user);
+    userService.save(user);
 
     // Then
     verify(passwordEncoder, never()).encode(anyString());
