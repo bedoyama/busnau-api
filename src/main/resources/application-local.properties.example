@@ -1,0 +1,6 @@
+# Local development overrides — copy this file to application-local.properties and fill in your values.
+# application-local.properties is git-ignored. Values here must match your .env.
+spring.datasource.url=jdbc:postgresql://localhost:5432/your_db_name
+spring.datasource.username=your_db_user
+spring.datasource.password=your_db_password
+
