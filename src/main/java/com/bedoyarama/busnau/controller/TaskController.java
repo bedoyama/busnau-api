@@ -1,9 +1,12 @@
 package com.bedoyarama.busnau.controller;
 
 import com.bedoyarama.busnau.entity.Task;
+import com.bedoyarama.busnau.entity.User;
 import com.bedoyarama.busnau.service.TaskService;
+import com.bedoyarama.busnau.service.UserService;
 import java.util.List;
 import java.util.Optional;
+import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
@@ -15,14 +18,25 @@ public class TaskController {
 
   private static final Logger logger = LoggerFactory.getLogger(TaskController.class);
   private final TaskService taskService;
+  private final UserService userService;
 
-  public TaskController(TaskService taskService) {
+  public TaskController(TaskService taskService, UserService userService) {
     this.taskService = taskService;
+    this.userService = userService;
   }
 
   @PostMapping
-  public ResponseEntity<Task> createTask(@RequestBody Task task) {
+  public ResponseEntity<Task> createTask(@RequestBody @Valid Task task) {
     logger.info("Creating task: {}", task.getTitle());
+    // Assuming task has userId in JSON, fetch User
+    if (task.getUser() == null && task.getUserId() != null) {
+      User user = userService.findById(task.getUserId()).orElse(null);
+      if (user == null) {
+        logger.warn("User not found for ID: {}", task.getUserId());
+        return ResponseEntity.badRequest().build();
+      }
+      task.setUser(user);
+    }
     Task savedTask = taskService.save(task);
     logger.info("Task created with ID: {}", savedTask.getId());
     return ResponseEntity.ok(savedTask);

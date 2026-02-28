@@ -4,6 +4,7 @@ import com.bedoyarama.busnau.entity.User;
 import com.bedoyarama.busnau.service.UserService;
 import java.util.List;
 import java.util.Optional;
+import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +22,7 @@ public class UserController {
   }
 
   @PostMapping
-  public ResponseEntity<User> createUser(@RequestBody User user) {
+  public ResponseEntity<User> createUser(@Valid @RequestBody User user) {
     logger.info("Creating user: {}", user.getUsername());
     User savedUser = userService.save(user);
     logger.info("User created with ID: {}", savedUser.getId());

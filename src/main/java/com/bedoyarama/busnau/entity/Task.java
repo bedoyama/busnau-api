@@ -1,6 +1,7 @@
 package com.bedoyarama.busnau.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import java.time.LocalDate;
 import java.util.Objects;
 import lombok.*;
@@ -19,20 +20,25 @@ public class Task {
   private Long id;
 
   @Column(nullable = false)
+  @NotBlank(message = "Title is required")
   private String title;
 
-  @Column(length = 1000)
+  @Column
   private String description;
 
+  @Column
   private LocalDate dueDate;
 
-  @Column(nullable = false)
+  @Column
   private Boolean completed = false;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "user_id")
   @ToString.Exclude
   private User user;
+
+  @Transient
+  private Long userId;
 
   @Override
   public final boolean equals(Object o) {

@@ -1,6 +1,8 @@
 package com.bedoyarama.busnau.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import java.util.List;
 import java.util.Objects;
 import lombok.*;
@@ -19,12 +21,16 @@ public class User {
   private Long id;
 
   @Column(unique = true, nullable = false)
+  @NotBlank(message = "Username is required")
   private String username;
 
   @Column(nullable = false)
+  @NotBlank(message = "Password is required")
+  @Size(min = 8, message = "Password must be at least 8 characters")
   private String password;
 
   @Column(nullable = false)
+  @NotBlank(message = "Role is required")
   private String role;
 
   @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
