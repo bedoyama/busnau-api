@@ -1,6 +1,6 @@
 # busnau-api
 
-REST API built with Spring Boot 4, Spring Data JPA, Spring Security, Liquibase, and PostgreSQL.
+REST API built with Spring Boot 4, Spring Data JPA, Spring Security, and PostgreSQL.
 
 ---
 
@@ -135,36 +135,6 @@ docker compose logs -f db
 
 ---
 
-## Database migrations with Liquibase
-
-This project uses Liquibase for database schema versioning and migrations.
-
-### Adding a new migration
-
-1. Create a new SQL file in `src/main/resources/db/changelog/changelog/`
-2. Name it with a sequential number, e.g., `02-add-user-table.sql`
-3. Add the change to `src/main/resources/db/changelog/db.changelog-master.xml`:
-
-```xml
-<include file="changelog/02-add-user-table.sql" relativeToChangelogFile="true"/>
-```
-
-### Running migrations
-
-Migrations run automatically on startup. To run manually:
-
-```sh
-./gradlew liquibaseUpdate
-```
-
-### Checking migration status
-
-```sh
-./gradlew liquibaseStatus
-```
-
----
-
 ## Project structure
 
 ```
@@ -174,9 +144,6 @@ src/
     resources/
       application.properties           # base config (env-var driven, committed)
       application-local.properties     # local dev overrides (git-ignored)
-      db/changelog/
-        db.changelog-master.xml        # master changelog
-        changelog/                     # individual migration files
 .env.example                           # env var template (committed)
 .env                                   # real credentials (git-ignored)
 docker-compose.yml                     # local Postgres service
