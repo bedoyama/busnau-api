@@ -109,6 +109,21 @@ docker compose down -v
 
 ---
 
+## Useful DB commands
+
+```sh
+# Open a psql shell inside the running container
+docker compose exec db psql -U your_db_user -d your_db_name
+
+# List all databases
+docker compose exec db psql -U your_db_user -l
+
+# Tail Postgres logs
+docker compose logs -f db
+```
+
+---
+
 ## Common Gradle tasks
 
 ```sh
