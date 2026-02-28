@@ -82,9 +82,7 @@ public class TaskController {
 
   @GetMapping("/user/{userId}/date-range")
   public ResponseEntity<List<Task>> getTasksByUserIdAndDateRange(
-      @PathVariable Long userId,
-      @RequestParam LocalDate start,
-      @RequestParam LocalDate end) {
+      @PathVariable Long userId, @RequestParam LocalDate start, @RequestParam LocalDate end) {
     logger.info("Fetching tasks for user {} between {} and {}", userId, start, end);
     List<Task> tasks = taskService.findByUserIdAndDueDateBetween(userId, start, end);
     logger.info("Retrieved {} tasks for user {} in date range", tasks.size(), userId);

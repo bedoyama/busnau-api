@@ -23,22 +23,18 @@ public class Task {
   @NotBlank(message = "Title is required")
   private String title;
 
-  @Column
-  private String description;
+  @Column private String description;
 
-  @Column
-  private LocalDate dueDate;
+  @Column private LocalDate dueDate;
 
-  @Column
-  private Boolean completed = false;
+  @Column private Boolean completed = false;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "user_id")
   @ToString.Exclude
   private User user;
 
-  @Transient
-  private Long userId;
+  @Transient private Long userId;
 
   @Override
   public final boolean equals(Object o) {
