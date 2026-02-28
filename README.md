@@ -140,7 +140,7 @@ docker compose logs -f db
 ```
 src/
   main/
-    java/com/example/busnau/   # application source
+    java/com/bedoyarama/busnau/   # application source
     resources/
       application.properties           # base config (env-var driven, committed)
       application-local.properties     # local dev overrides (git-ignored)

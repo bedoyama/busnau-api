@@ -1,4 +1,4 @@
-package com.example.busnau;
+package com.bedoyarama.busnau;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
