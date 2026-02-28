@@ -1,6 +1,6 @@
 # busnau-api
 
-REST API built with Spring Boot 4, Spring Data JPA, Spring Security, and PostgreSQL.
+Task manager demo REST API built with Spring Boot 4, Spring Data JPA, Spring Security, Flyway, and PostgreSQL.
 
 ---
 
@@ -144,6 +144,7 @@ src/
     resources/
       application.properties           # base config (env-var driven, committed)
       application-local.properties     # local dev overrides (git-ignored)
+      db/migration/                    # Flyway migration scripts
 .env.example                           # env var template (committed)
 .env                                   # real credentials (git-ignored)
 docker-compose.yml                     # local Postgres service
