@@ -4,9 +4,10 @@ import com.bedoyarama.busnau.entity.Task;
 import com.bedoyarama.busnau.entity.User;
 import com.bedoyarama.busnau.service.TaskService;
 import com.bedoyarama.busnau.service.UserService;
+import jakarta.validation.Valid;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
-import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
@@ -76,6 +77,17 @@ public class TaskController {
     logger.info("Fetching tasks with completed status: {}", completed);
     List<Task> tasks = taskService.findByCompleted(completed);
     logger.info("Retrieved {} tasks with completed: {}", tasks.size(), completed);
+    return ResponseEntity.ok(tasks);
+  }
+
+  @GetMapping("/user/{userId}/date-range")
+  public ResponseEntity<List<Task>> getTasksByUserIdAndDateRange(
+      @PathVariable Long userId,
+      @RequestParam LocalDate start,
+      @RequestParam LocalDate end) {
+    logger.info("Fetching tasks for user {} between {} and {}", userId, start, end);
+    List<Task> tasks = taskService.findByUserIdAndDueDateBetween(userId, start, end);
+    logger.info("Retrieved {} tasks for user {} in date range", tasks.size(), userId);
     return ResponseEntity.ok(tasks);
   }
 

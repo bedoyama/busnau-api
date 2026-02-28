@@ -116,6 +116,14 @@
       "method": "DELETE",
       "url": "{{base_url}}/api/tasks/1",
       "parentId": "wrk_001"
+    },
+    {
+      "_id": "req_012",
+      "_type": "request",
+      "name": "Get Tasks by User and Date Range",
+      "method": "GET",
+      "url": "{{base_url}}/api/tasks/user/1/date-range?start=2026-01-01&end=2026-12-31",
+      "parentId": "wrk_001"
     }
   ]
 }

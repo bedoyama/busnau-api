@@ -2,9 +2,9 @@ package com.bedoyarama.busnau.controller;
 
 import com.bedoyarama.busnau.entity.User;
 import com.bedoyarama.busnau.service.UserService;
+import jakarta.validation.Valid;
 import java.util.List;
 import java.util.Optional;
-import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
