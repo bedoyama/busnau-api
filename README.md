@@ -131,6 +131,8 @@ docker compose logs -f db
 ./gradlew test          # run tests
 ./gradlew build         # compile + test + package
 ./gradlew bootJar       # build executable JAR -> build/libs/
+./gradlew spotlessApply # auto-format code
+./gradlew spotlessCheck # check code formatting (fails if not formatted)
 ```
 
 ---
