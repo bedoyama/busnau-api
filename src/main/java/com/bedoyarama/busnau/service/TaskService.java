@@ -11,8 +11,11 @@ import java.util.Optional;
 @Service
 public class TaskService {
 
-    @Autowired
-    private TaskRepository taskRepository;
+    private final TaskRepository taskRepository;
+
+    public TaskService(TaskRepository taskRepository) {
+        this.taskRepository = taskRepository;
+    }
 
     public Task save(Task task) {
         return taskRepository.save(task);
