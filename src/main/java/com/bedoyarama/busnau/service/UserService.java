@@ -2,7 +2,6 @@ package com.bedoyarama.busnau.service;
 
 import com.bedoyarama.busnau.entity.User;
 import com.bedoyarama.busnau.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
