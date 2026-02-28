@@ -1,6 +1,6 @@
 # busnau-api
 
-REST API built with Spring Boot 4, Spring Data JPA, Spring Security, and PostgreSQL.
+REST API built with Spring Boot 4, Spring Data JPA, Spring Security, Liquibase, and PostgreSQL.
 
 ---
 
@@ -33,7 +33,7 @@ Open `.env` and fill in your values:
 
 ```dotenv
 DB_HOST=localhost
-DB_PORT=5432
+DB_PORT=5433
 DB_NAME=your_db_name
 DB_USER=your_db_user
 DB_PASSWORD=supersecret
@@ -51,7 +51,7 @@ cp src/main/resources/application-local.properties.example src/main/resources/ap
 Open `application-local.properties` and fill in the same credentials you used in `.env`:
 
 ```properties
-spring.datasource.url=jdbc:postgresql://localhost:5432/your_db_name
+spring.datasource.url=jdbc:postgresql://localhost:5433/your_db_name
 spring.datasource.username=your_db_user
 spring.datasource.password=supersecret
 ```
@@ -135,6 +135,36 @@ docker compose logs -f db
 
 ---
 
+## Database migrations with Liquibase
+
+This project uses Liquibase for database schema versioning and migrations.
+
+### Adding a new migration
+
+1. Create a new SQL file in `src/main/resources/db/changelog/changelog/`
+2. Name it with a sequential number, e.g., `02-add-user-table.sql`
+3. Add the change to `src/main/resources/db/changelog/db.changelog-master.xml`:
+
+```xml
+<include file="changelog/02-add-user-table.sql" relativeToChangelogFile="true"/>
+```
+
+### Running migrations
+
+Migrations run automatically on startup. To run manually:
+
+```sh
+./gradlew liquibaseUpdate
+```
+
+### Checking migration status
+
+```sh
+./gradlew liquibaseStatus
+```
+
+---
+
 ## Project structure
 
 ```
@@ -144,8 +174,10 @@ src/
     resources/
       application.properties           # base config (env-var driven, committed)
       application-local.properties     # local dev overrides (git-ignored)
-docker-compose.yml                     # local Postgres service
+      db/changelog/
+        db.changelog-master.xml        # master changelog
+        changelog/                     # individual migration files
 .env.example                           # env var template (committed)
 .env                                   # real credentials (git-ignored)
+docker-compose.yml                     # local Postgres service
 ```
-
