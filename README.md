@@ -54,6 +54,8 @@ Open `application-local.properties` and fill in the same credentials you used in
 spring.datasource.url=jdbc:postgresql://localhost:5433/your_db_name
 spring.datasource.username=your_db_user
 spring.datasource.password=supersecret
+jwt.secret=your-very-secure-jwt-secret-key-at-least-256-bits-long
+jwt.expiration=86400000
 ```
 
 > **Why is this needed separately?** Spring Boot reads this file directly at runtime — it does not read `.env`.
