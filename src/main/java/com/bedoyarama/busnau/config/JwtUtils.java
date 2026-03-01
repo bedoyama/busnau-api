@@ -2,16 +2,14 @@ package com.bedoyarama.busnau.config;
 
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
-
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.Date;
+import javax.crypto.SecretKey;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
-
-import javax.crypto.SecretKey;
 
 @Component
 public class JwtUtils {
@@ -29,16 +27,21 @@ public class JwtUtils {
   public String generateJwtToken(Authentication authentication) {
     UserDetails userPrincipal = (UserDetails) authentication.getPrincipal();
 
-      assert userPrincipal != null;
-      return Jwts.builder().subject(userPrincipal.getUsername()).issuedAt(new Date()).expiration(new Date((new Date()).getTime() + jwtExpirationMs))
+    assert userPrincipal != null;
+    return Jwts.builder()
+        .subject(userPrincipal.getUsername())
+        .issuedAt(new Date())
+        .expiration(new Date((new Date()).getTime() + jwtExpirationMs))
         .signWith(getSigningKey())
         .compact();
   }
 
   public String getUserNameFromJwtToken(String token) {
     return Jwts.parser()
-            .verifyWith((SecretKey) getSigningKey())
-            .build().parseSignedClaims(token).getPayload()
+        .verifyWith((SecretKey) getSigningKey())
+        .build()
+        .parseSignedClaims(token)
+        .getPayload()
         .getSubject();
   }
 
