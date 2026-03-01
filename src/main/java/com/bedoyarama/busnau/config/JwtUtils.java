@@ -6,6 +6,7 @@ import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.Date;
 import javax.crypto.SecretKey;
+import lombok.Getter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -20,6 +21,10 @@ public class JwtUtils {
   @Value("${jwt.expiration}")
   private int jwtExpirationMs;
 
+  @Getter
+  @Value("${jwt.refreshExpiration}")
+  private long jwtRefreshExpirationMs;
+
   private Key getSigningKey() {
     return Keys.hmacShaKeyFor(jwtSecret.getBytes(StandardCharsets.UTF_8));
   }
@@ -32,6 +37,18 @@ public class JwtUtils {
         .subject(userPrincipal.getUsername())
         .issuedAt(new Date())
         .expiration(new Date((new Date()).getTime() + jwtExpirationMs))
+        .signWith(getSigningKey())
+        .compact();
+  }
+
+  public String generateRefreshToken(Authentication authentication) {
+    UserDetails userPrincipal = (UserDetails) authentication.getPrincipal();
+
+    assert userPrincipal != null;
+    return Jwts.builder()
+        .subject(userPrincipal.getUsername())
+        .issuedAt(new Date())
+        .expiration(new Date((new Date()).getTime() + jwtRefreshExpirationMs))
         .signWith(getSigningKey())
         .compact();
   }

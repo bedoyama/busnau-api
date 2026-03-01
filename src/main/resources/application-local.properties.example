@@ -6,3 +6,4 @@ spring.datasource.password=your_db_password
 
 jwt.secret=your-secure-secret-key-here
 jwt.expiration=86400000
+jwt.refreshExpiration=604800000

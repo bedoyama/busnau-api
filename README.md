@@ -56,6 +56,7 @@ spring.datasource.username=your_db_user
 spring.datasource.password=supersecret
 jwt.secret=your-very-secure-jwt-secret-key-at-least-256-bits-long
 jwt.expiration=86400000
+jwt.refreshExpiration=604800000
 ```
 
 > **Why is this needed separately?** Spring Boot reads this file directly at runtime — it does not read `.env`.

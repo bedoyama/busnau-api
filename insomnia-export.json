@@ -34,6 +34,18 @@
       "parentId": "wrk_001"
     },
     {
+      "_id": "req_014",
+      "_type": "request",
+      "name": "Refresh Token",
+      "method": "POST",
+      "url": "{{base_url}}/api/auth/refresh",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"refreshToken\": \"your-refresh-token-here\"\n}"
+      },
+      "parentId": "wrk_001"
+    },
+    {
       "_id": "req_002",
       "_type": "request",
       "name": "Create User",

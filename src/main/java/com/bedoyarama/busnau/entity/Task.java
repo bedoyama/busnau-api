@@ -1,5 +1,6 @@
 package com.bedoyarama.busnau.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import java.time.LocalDate;
@@ -32,6 +33,7 @@ public class Task {
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "user_id")
   @ToString.Exclude
+  @JsonIgnore
   private User user;
 
   @Transient private Long userId;

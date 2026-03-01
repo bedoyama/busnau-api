@@ -1,5 +1,6 @@
 package com.bedoyarama.busnau.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -35,7 +36,13 @@ public class User {
 
   @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
   @ToString.Exclude
+  @JsonIgnore
   private List<Task> tasks;
+
+  @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+  @ToString.Exclude
+  @JsonIgnore
+  private List<RefreshToken> refreshTokens;
 
   @Override
   public final boolean equals(Object o) {
