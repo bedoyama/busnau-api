@@ -24,6 +24,18 @@
     {
       "_id": "req_001",
       "_type": "request",
+      "name": "Login",
+      "method": "POST",
+      "url": "{{base_url}}/api/auth/login",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"username\": \"{{api_username}}\",\n  \"password\": \"{{api_password}}\"\n}"
+      },
+      "parentId": "wrk_001"
+    },
+    {
+      "_id": "req_002",
+      "_type": "request",
       "name": "Create User",
       "method": "POST",
       "url": "{{base_url}}/api/users",
@@ -34,7 +46,7 @@
       "parentId": "wrk_001"
     },
     {
-      "_id": "req_002",
+      "_id": "req_003",
       "_type": "request",
       "name": "Get User by ID",
       "method": "GET",
@@ -42,7 +54,7 @@
       "parentId": "wrk_001"
     },
     {
-      "_id": "req_003",
+      "_id": "req_004",
       "_type": "request",
       "name": "Get User by Username",
       "method": "GET",
@@ -50,7 +62,7 @@
       "parentId": "wrk_001"
     },
     {
-      "_id": "req_004",
+      "_id": "req_005",
       "_type": "request",
       "name": "Get All Users",
       "method": "GET",
@@ -58,7 +70,7 @@
       "parentId": "wrk_001"
     },
     {
-      "_id": "req_005",
+      "_id": "req_006",
       "_type": "request",
       "name": "Delete User",
       "method": "DELETE",
@@ -66,7 +78,7 @@
       "parentId": "wrk_001"
     },
     {
-      "_id": "req_006",
+      "_id": "req_007",
       "_type": "request",
       "name": "Create Task",
       "method": "POST",
@@ -78,7 +90,7 @@
       "parentId": "wrk_001"
     },
     {
-      "_id": "req_007",
+      "_id": "req_008",
       "_type": "request",
       "name": "Get Task by ID",
       "method": "GET",
@@ -86,7 +98,7 @@
       "parentId": "wrk_001"
     },
     {
-      "_id": "req_008",
+      "_id": "req_009",
       "_type": "request",
       "name": "Get All Tasks",
       "method": "GET",
@@ -94,7 +106,7 @@
       "parentId": "wrk_001"
     },
     {
-      "_id": "req_009",
+      "_id": "req_010",
       "_type": "request",
       "name": "Get Tasks by User ID",
       "method": "GET",
@@ -102,7 +114,7 @@
       "parentId": "wrk_001"
     },
     {
-      "_id": "req_010",
+      "_id": "req_011",
       "_type": "request",
       "name": "Get Tasks by Completed Status",
       "method": "GET",
@@ -110,7 +122,7 @@
       "parentId": "wrk_001"
     },
     {
-      "_id": "req_011",
+      "_id": "req_012",
       "_type": "request",
       "name": "Delete Task",
       "method": "DELETE",
@@ -118,7 +130,7 @@
       "parentId": "wrk_001"
     },
     {
-      "_id": "req_012",
+      "_id": "req_013",
       "_type": "request",
       "name": "Get Tasks by User and Date Range",
       "method": "GET",
