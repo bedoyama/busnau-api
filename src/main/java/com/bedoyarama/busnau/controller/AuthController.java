@@ -92,14 +92,16 @@ public class AuthController {
         .findByToken(requestRefreshToken)
         .map(
             refreshToken -> {
-              if (refreshToken.isExpired()) {
+              if (refreshToken.isExpired() || refreshToken.isRevoked()) {
                 refreshTokenRepository.delete(refreshToken);
-                return ResponseEntity.badRequest().body("Refresh token is expired");
+                return ResponseEntity.badRequest().body("Refresh token is expired or revoked");
               }
 
               User user = refreshToken.getUser();
               UserDetails userDetails = userDetailsService.loadUserByUsername(user.getUsername());
-              UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+              UsernamePasswordAuthenticationToken auth =
+                  new UsernamePasswordAuthenticationToken(
+                      userDetails, null, userDetails.getAuthorities());
 
               String newAccessToken = jwtUtils.generateJwtToken(auth);
 

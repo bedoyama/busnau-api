@@ -24,6 +24,9 @@ public class RefreshToken {
   @Column(nullable = false)
   private Instant expiryDate;
 
+  @Column(nullable = false)
+  private boolean revoked = false;
+
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "user_id", nullable = false)
   @ToString.Exclude
