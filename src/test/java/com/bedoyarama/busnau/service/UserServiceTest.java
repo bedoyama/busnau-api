@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
+import com.bedoyarama.busnau.entity.Role;
 import com.bedoyarama.busnau.entity.User;
 import com.bedoyarama.busnau.repository.UserRepository;
 import org.junit.jupiter.api.Test;
@@ -28,7 +29,7 @@ class UserServiceTest {
     User user = new User();
     user.setUsername("testuser");
     user.setPassword("plainpassword");
-    user.setRole("USER");
+    user.setRole(Role.USER);
 
     when(passwordEncoder.encode("plainpassword")).thenReturn("encodedpassword");
     when(userRepository.save(any(User.class))).thenReturn(user);
@@ -48,7 +49,7 @@ class UserServiceTest {
     User user = new User();
     user.setUsername("testuser");
     user.setPassword("$2a$10$encodedpassword");
-    user.setRole("USER");
+    user.setRole(Role.USER);
 
     when(userRepository.save(any(User.class))).thenReturn(user);
 

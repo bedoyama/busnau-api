@@ -1,5 +1,6 @@
 package com.bedoyarama.busnau.config;
 
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -10,14 +11,19 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.filter.OncePerRequestFilter;
 
 @Configuration
 public class SecurityConfig {
 
   private final AuthTokenFilter authTokenFilter;
+  private final OncePerRequestFilter rateLimitFilter;
 
-  public SecurityConfig(AuthTokenFilter authTokenFilter) {
+  public SecurityConfig(
+      AuthTokenFilter authTokenFilter,
+      @Qualifier("rateLimitFilter") OncePerRequestFilter rateLimitFilter) {
     this.authTokenFilter = authTokenFilter;
+    this.rateLimitFilter = rateLimitFilter;
   }
 
   @Bean
@@ -36,6 +42,7 @@ public class SecurityConfig {
                     .anyRequest()
                     .authenticated())
         .csrf(AbstractHttpConfigurer::disable)
+        .addFilterBefore(rateLimitFilter, UsernamePasswordAuthenticationFilter.class)
         .addFilterBefore(authTokenFilter, UsernamePasswordAuthenticationFilter.class);
     return http.build();
   }

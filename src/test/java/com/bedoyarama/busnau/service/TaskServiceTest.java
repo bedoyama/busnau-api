@@ -28,14 +28,14 @@ class TaskServiceTest {
     LocalDate end = LocalDate.of(2026, 12, 31);
     List<Task> expectedTasks = List.of(new Task());
 
-    when(taskRepository.findByUserIdAndDueDateBetween(userId, start, end))
+    when(taskRepository.findByUser_IdAndDueDateBetween(userId, start, end))
         .thenReturn(expectedTasks);
 
     // When
     List<Task> tasks = taskService.findByUserIdAndDueDateBetween(userId, start, end);
 
     // Then
-    verify(taskRepository).findByUserIdAndDueDateBetween(userId, start, end);
+    verify(taskRepository).findByUser_IdAndDueDateBetween(userId, start, end);
     assertEquals(expectedTasks, tasks);
   }
 }
