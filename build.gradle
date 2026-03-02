@@ -69,7 +69,8 @@ pmd {
 	consoleOutput = true
 	toolVersion = "7.0.0"
 	rulesMinimumPriority = 5
-	ruleSets = ["category/java/bestpractices.xml", "category/java/errorprone.xml", "category/java/performance.xml"]
+	ruleSets = []
+	ruleSetFiles = files("config/pmd/pmd-ruleset.xml")
 	ignoreFailures = true
 }
 

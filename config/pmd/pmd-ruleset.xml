@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<ruleset name="Custom PMD Rules"
+         xmlns="http://pmd.sourceforge.net/ruleset/2.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://pmd.sourceforge.net/ruleset/2.0.0 http://pmd.sourceforge.net/ruleset_2_0_0.xsd">
+
+    <description>Busnau API PMD Ruleset</description>
+
+    <!-- Include categories or specific rules -->
+    <rule ref="category/java/bestpractices.xml">
+        <!-- Exclude noisy ones if needed, e.g. GuardLogStatement if you skip level guards -->
+        <exclude name="GuardLogStatement"/>
+        <exclude name="JUnitTestContainsTooManyAsserts"/>
+        <exclude name="JUnitAssertionsShouldIncludeMessage"/>
+    </rule>
+
+    <rule ref="category/java/errorprone.xml">
+        <!-- Explicitly include ProperLogger if you want to force it -->
+        <!-- <rule name="ProperLogger"/> -->
+    </rule>
+
+    <rule ref="category/java/performance.xml"/>
+
+    <!-- Adding codestyle as it often contains rules users want, but excluding strict ones -->
+    <rule ref="category/java/codestyle.xml">
+       <exclude name="AtLeastOneConstructor"/>
+       <exclude name="LocalVariableCouldBeFinal"/>
+       <exclude name="MethodArgumentCouldBeFinal"/>
+       <exclude name="LongVariable"/>
+       <exclude name="ShortVariable"/>
+       <exclude name="OnlyOneReturn"/>
+       <exclude name="CommentDefaultAccessModifier"/>
+       <exclude name="DefaultPackage"/>
+       <exclude name="FieldNamingConventions"/>
+       <exclude name="ConfusingTernary"/>
+       <exclude name="ControlStatementBraces"/>
+       <exclude name="UselessParentheses"/>
+    </rule>
+
+</ruleset>
