@@ -13,7 +13,7 @@ def transform_postman_collection(postman_data):
         postman_data["variable"] = []
 
     # Add required variables
-    required_vars = ["base_url", "username", "password", "accessToken", "refreshToken"]
+    required_vars = ["base_url", "username", "password", "accessToken", "refreshToken", "bearerToken"]
     existing_vars = {var["key"] for var in postman_data["variable"]}
 
     for var in required_vars:
@@ -41,7 +41,7 @@ def transform_request(postman_request):
     name = postman_request.get("name", "").lower()
 
     # Check if it's a login request
-    if "login" in name or "auth" in name:
+    if "login" in name or "auth" in name or "refresh" in name:
         # Modify body to use environment variables
         if "body" in request and request["body"].get("mode") == "raw":
             raw_body = request["body"].get("raw", "")
@@ -71,6 +71,7 @@ def transform_request(postman_request):
                     "    var jsonData = pm.response.json();",
                     "    if (jsonData.accessToken) {",
                     "        pm.environment.set(\"accessToken\", jsonData.accessToken);",
+                    "        pm.environment.set(\"bearerToken\", jsonData.accessToken);",
                     "    }",
                     "    if (jsonData.refreshToken) {",
                     "        pm.environment.set(\"refreshToken\", jsonData.refreshToken);",
