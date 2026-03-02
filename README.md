@@ -194,6 +194,37 @@ The generated collection files are ignored by Git (see `.gitignore`).
 
 ---
 
+## Quality and Verification
+
+This project uses several tools to ensure code quality:
+
+| Tool | Purpose |
+|------|---------|
+| **Spotless** | Auto-formats Java code (Google Java Style) |
+| **PMD** | Static code analysis |
+| **SpotBugs** | Static analysis looking for bugs |
+
+### Run checks
+
+- **Run all quality checks** (Spotless, PMD, SpotBugs + Tests):
+  ```bash
+  ./gradlew check
+  ```
+
+- **Run individual tools**:
+  ```bash
+  ./gradlew pmdMain        # Run PMD analysis
+  ./gradlew spotbugsMain   # Run SpotBugs analysis
+  ./gradlew spotlessCheck  # Check code formatting
+  ```
+
+- **Fix formatting issues automatically**:
+  ```bash
+  ./gradlew spotlessApply
+  ```
+
+---
+
 ## Project structure
 
 ```
