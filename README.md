@@ -149,7 +149,7 @@ The project includes tools to generate and transform a Postman collection from t
 Ensure the app is running on `localhost:8080`, then run the provided script:
 
 ```sh
-./generate_postman_collection.sh
+./postman/generate_postman_collection.sh
 ```
 
 This script:
@@ -184,7 +184,7 @@ curl -s http://localhost:8080/v3/api-docs > openapi.json
 npx openapi-to-postmanv2 -s openapi.json -o myapp-collection.json -p -O folderStrategy=Tags
 
 # Transform for env vars and auth
-python3 transform_to_postman.py myapp-collection.json
+python3 postman/transform_to_postman.py myapp-collection.json
 
 # Clean up
 rm openapi.json
@@ -207,4 +207,5 @@ src/
 .env.example                           # env var template (committed)
 .env                                   # real credentials (git-ignored)
 docker-compose.yml                     # local Postgres service
+postman/                               # Postman collection generation tools
 ```

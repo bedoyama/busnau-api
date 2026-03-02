@@ -41,6 +41,4 @@ out/
 src/main/resources/application-local.properties
 
 ### Generated files ###
-myapp-collection.json
-myapp-collection_transformed.json
-
+postman/myapp-collection*
