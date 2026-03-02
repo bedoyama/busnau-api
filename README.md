@@ -140,6 +140,60 @@ docker compose logs -f db
 
 ---
 
+## API Testing with Postman
+
+The project includes tools to generate and transform a Postman collection from the OpenAPI specification for easy API testing.
+
+### Generate Postman Collection
+
+Ensure the app is running on `localhost:8080`, then run the provided script:
+
+```sh
+./generate_postman_collection.sh
+```
+
+This script:
+
+1. Fetches the OpenAPI JSON from `/v3/api-docs`
+2. Converts it to a Postman collection using `openapi-to-postmanv2`
+3. Transforms the collection to use environment variables and automatic token handling
+4. Outputs `myapp-collection_transformed.json`
+
+### Import and Configure in Postman
+
+1. Import `myapp-collection_transformed.json` into Postman.
+2. Create a new environment with the following variables:
+   - `base_url`: `http://localhost:8080`
+   - `username`: Your test username (e.g., `user`)
+   - `password`: Your test password
+   - `accessToken`: (leave empty, set automatically)
+   - `refreshToken`: (leave empty, set automatically)
+
+3. Run the "Login" request first — it will automatically set `accessToken` and `refreshToken` in the environment.
+4. All other requests will use `{{accessToken}}` for Bearer authentication.
+
+### Manual Generation (Alternative)
+
+If you prefer manual steps:
+
+```sh
+# Fetch OpenAPI spec
+curl -s http://localhost:8080/v3/api-docs > openapi.json
+
+# Convert to Postman collection
+npx openapi-to-postmanv2 -s openapi.json -o myapp-collection.json -p -O folderStrategy=Tags
+
+# Transform for env vars and auth
+python3 transform_to_postman.py myapp-collection.json
+
+# Clean up
+rm openapi.json
+```
+
+The generated collection files are ignored by Git (see `.gitignore`).
+
+---
+
 ## Project structure
 
 ```
