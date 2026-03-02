@@ -1,0 +1,44 @@
+# Git
+.git
+.gitignore
+.gitattributes
+
+# Gradle
+.gradle/
+build/
+gradle/wrapper/gradle-wrapper.jar
+
+# IDE
+.idea/
+*.iml
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Environment files
+.env
+.env.example
+
+# Docker
+docker-compose.yml
+Dockerfile*
+
+# Documentation
+README.md
+HELP.md
+
+# Postman
+postman/
+myapp-collection*.json
+
+# Quality tools
+config/
+spotbugs-filter.xml
+
+# Test files
+src/test/

@@ -96,7 +96,13 @@ export $(cat .env | xargs)
 ./gradlew bootRun
 ```
 
-The API will be available at `http://localhost:8080`.
+**Option C — using Docker Compose (containerized):**
+
+```sh
+docker compose up --build
+```
+
+This builds the app image and runs both the DB and app containers. The app will be available at `http://localhost:8080`.
 
 ---
 
