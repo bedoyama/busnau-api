@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FindBugsFilter>
+    <!-- Safe in Spring DI -->
+    <Match>
+        <Bug pattern="EI_EXPOSE_REP2"/>
+        <Method name="&lt;init&gt;"/>  <!-- constructors -->
+        <Class name="~.*(Controller|Service|Config)$"/>
+    </Match>
+
+    <!-- Hibernate proxy equals – common in JPA -->
+    <Match>
+        <Bug pattern="EQ_CHECK_FOR_OPERAND_NOT_COMPATIBLE_WITH_THIS"/>
+        <Class name="~.*entity\..*"/>
+    </Match>
+</FindBugsFilter>
