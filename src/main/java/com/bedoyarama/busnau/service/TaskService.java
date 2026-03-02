@@ -29,7 +29,7 @@ public class TaskService {
   }
 
   public List<Task> findByUserId(Long userId) {
-    return taskRepository.findByUserId(userId);
+    return taskRepository.findByUser_Id(userId);
   }
 
   public List<Task> findByCompleted(Boolean completed) {
@@ -37,7 +37,11 @@ public class TaskService {
   }
 
   public List<Task> findByUserIdAndDueDateBetween(Long userId, LocalDate start, LocalDate end) {
-    return taskRepository.findByUserIdAndDueDateBetween(userId, start, end);
+    return taskRepository.findByUser_IdAndDueDateBetween(userId, start, end);
+  }
+
+  public List<Task> findByUserIdAndCompleted(Long userId, Boolean completed) {
+    return taskRepository.findByUser_IdAndCompleted(userId, completed);
   }
 
   public void deleteById(Long id) {

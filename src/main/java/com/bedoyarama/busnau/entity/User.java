@@ -32,7 +32,8 @@ public class User {
 
   @Column(nullable = false)
   @NotBlank(message = "Role is required")
-  private String role;
+  @Enumerated(EnumType.STRING)
+  private Role role;
 
   @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
   @ToString.Exclude

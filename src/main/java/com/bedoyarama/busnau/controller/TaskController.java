@@ -1,5 +1,6 @@
 package com.bedoyarama.busnau.controller;
 
+import com.bedoyarama.busnau.entity.Role;
 import com.bedoyarama.busnau.entity.Task;
 import com.bedoyarama.busnau.entity.User;
 import com.bedoyarama.busnau.service.TaskService;
@@ -7,10 +8,12 @@ import com.bedoyarama.busnau.service.UserService;
 import jakarta.validation.Valid;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -27,19 +30,39 @@ public class TaskController {
   }
 
   @PostMapping
-  public ResponseEntity<Task> createTask(@RequestBody @Valid Task task) {
-    logger.info("Creating task: {}", task.getTitle());
-    // Assuming task has userId in JSON, fetch User
-    if (task.getUser() == null && task.getUserId() != null) {
-      User user = userService.findById(task.getUserId()).orElse(null);
-      if (user == null) {
-        logger.warn("User not found for ID: {}", task.getUserId());
-        return ResponseEntity.badRequest().build();
+  public ResponseEntity<Task> createTask(@RequestBody @Valid CreateTaskRequest request) {
+    logger.info("Creating task: {}", request.getTitle());
+
+    User currentUser = getCurrentUser();
+    User taskUser = currentUser;
+
+    // Allow ADMIN to assign task to another user
+    if (request.getUserId() != null && currentUser.getRole() == Role.ADMIN) {
+      Optional<User> targetUser = userService.findById(request.getUserId());
+      if (targetUser.isPresent()) {
+        taskUser = targetUser.get();
+        logger.info(
+            "ADMIN {} creating task for user {}",
+            currentUser.getUsername(),
+            taskUser.getUsername());
+      } else {
+        logger.warn(
+            "ADMIN {} tried to create task for non-existent user {}",
+            currentUser.getUsername(),
+            request.getUserId());
+        return ResponseEntity.badRequest().body(null);
       }
-      task.setUser(user);
     }
+
+    Task task = new Task();
+    task.setTitle(request.getTitle());
+    task.setDescription(request.getDescription());
+    task.setDueDate(request.getDueDate());
+    task.setCompleted(request.getCompleted() != null ? request.getCompleted() : false);
+    task.setUser(taskUser);
+
     Task savedTask = taskService.save(task);
-    logger.info("Task created with ID: {}", savedTask.getId());
+    logger.info("Task created with ID: {} for user {}", savedTask.getId(), taskUser.getUsername());
     return ResponseEntity.ok(savedTask);
   }
 
@@ -48,6 +71,13 @@ public class TaskController {
     logger.info("Fetching task by ID: {}", id);
     Optional<Task> task = taskService.findById(id);
     if (task.isPresent()) {
+      User currentUser = getCurrentUser();
+      if (currentUser.getRole() != Role.ADMIN
+          && !task.get().getUser().getId().equals(currentUser.getId())) {
+        logger.warn(
+            "Access denied: task {} does not belong to user {}", id, currentUser.getUsername());
+        return ResponseEntity.status(403).build();
+      }
       logger.info("Task found: {}", task.get().getTitle());
       return ResponseEntity.ok(task.get());
     } else {
@@ -58,14 +88,36 @@ public class TaskController {
 
   @GetMapping
   public ResponseEntity<List<Task>> getAllTasks() {
-    logger.info("Fetching all tasks");
-    List<Task> tasks = taskService.findAll();
-    logger.info("Retrieved {} tasks", tasks.size());
-    return ResponseEntity.ok(tasks);
+    User currentUser = getCurrentUser();
+    if (currentUser.getRole() == Role.ADMIN) {
+      logger.info("Fetching all tasks (ADMIN access)");
+      List<Task> tasks = taskService.findAll();
+      logger.info("Retrieved {} tasks", tasks.size());
+      return ResponseEntity.ok(tasks);
+    } else {
+      logger.info("Fetching all tasks for current user");
+      List<Task> tasks = taskService.findByUserId(currentUser.getId());
+      logger.info("Retrieved {} tasks for user {}", tasks.size(), currentUser.getUsername());
+      return ResponseEntity.ok(tasks);
+    }
   }
 
   @GetMapping("/user/{userId}")
   public ResponseEntity<List<Task>> getTasksByUserId(@PathVariable Long userId) {
+    User currentUser = getCurrentUser();
+    logger.info(
+        "Current user: {} id: {}, role: {}, requested userId: {}",
+        currentUser.getUsername(),
+        currentUser.getId(),
+        currentUser.getRole(),
+        userId);
+    if (currentUser.getRole() != Role.ADMIN && !userId.equals(currentUser.getId())) {
+      logger.warn(
+          "Access denied: user {} trying to access tasks of user {}",
+          currentUser.getUsername(),
+          userId);
+      return ResponseEntity.status(403).build();
+    }
     logger.info("Fetching tasks for user ID: {}", userId);
     List<Task> tasks = taskService.findByUserId(userId);
     logger.info("Retrieved {} tasks for user {}", tasks.size(), userId);
@@ -74,15 +126,28 @@ public class TaskController {
 
   @GetMapping("/completed/{completed}")
   public ResponseEntity<List<Task>> getTasksByCompleted(@PathVariable Boolean completed) {
-    logger.info("Fetching tasks with completed status: {}", completed);
-    List<Task> tasks = taskService.findByCompleted(completed);
-    logger.info("Retrieved {} tasks with completed: {}", tasks.size(), completed);
+    logger.info("Fetching tasks with completed status: {} for current user", completed);
+    User currentUser = getCurrentUser();
+    List<Task> tasks = taskService.findByUserIdAndCompleted(currentUser.getId(), completed);
+    logger.info(
+        "Retrieved {} tasks with completed: {} for user {}",
+        tasks.size(),
+        completed,
+        currentUser.getUsername());
     return ResponseEntity.ok(tasks);
   }
 
   @GetMapping("/user/{userId}/date-range")
   public ResponseEntity<List<Task>> getTasksByUserIdAndDateRange(
       @PathVariable Long userId, @RequestParam LocalDate start, @RequestParam LocalDate end) {
+    User currentUser = getCurrentUser();
+    if (currentUser.getRole() != Role.ADMIN && !userId.equals(currentUser.getId())) {
+      logger.warn(
+          "Access denied: user {} trying to access date-range tasks of user {}",
+          currentUser.getUsername(),
+          userId);
+      return ResponseEntity.status(403).build();
+    }
     logger.info("Fetching tasks for user {} between {} and {}", userId, start, end);
     List<Task> tasks = taskService.findByUserIdAndDueDateBetween(userId, start, end);
     logger.info("Retrieved {} tasks for user {} in date range", tasks.size(), userId);
@@ -92,8 +157,29 @@ public class TaskController {
   @DeleteMapping("/{id}")
   public ResponseEntity<Void> deleteTask(@PathVariable Long id) {
     logger.info("Deleting task with ID: {}", id);
-    taskService.deleteById(id);
-    logger.info("Task deleted with ID: {}", id);
-    return ResponseEntity.noContent().build();
+    Optional<Task> task = taskService.findById(id);
+    if (task.isPresent()) {
+      User currentUser = getCurrentUser();
+      if (currentUser.getRole() != Role.ADMIN
+          && !task.get().getUser().getId().equals(currentUser.getId())) {
+        logger.warn(
+            "Access denied: user {} trying to delete task {} of another user",
+            currentUser.getUsername(),
+            id);
+        return ResponseEntity.status(403).build();
+      }
+      taskService.deleteById(id);
+      logger.info("Task deleted with ID: {}", id);
+      return ResponseEntity.noContent().build();
+    } else {
+      logger.warn("Task not found with ID: {}", id);
+      return ResponseEntity.notFound().build();
+    }
+  }
+
+  private User getCurrentUser() {
+    String username =
+        Objects.requireNonNull(SecurityContextHolder.getContext().getAuthentication()).getName();
+    return userService.findByUsername(username);
   }
 }
