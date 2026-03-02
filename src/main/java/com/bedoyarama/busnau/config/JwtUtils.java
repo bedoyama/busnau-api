@@ -7,12 +7,14 @@ import java.security.Key;
 import java.util.Date;
 import javax.crypto.SecretKey;
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 @Component
+@Slf4j
 public class JwtUtils {
 
   @Value("${jwt.secret}")
@@ -67,13 +69,13 @@ public class JwtUtils {
       Jwts.parser().verifyWith((SecretKey) getSigningKey()).build().parseSignedClaims(authToken);
       return true;
     } catch (MalformedJwtException e) {
-      System.err.println("Invalid JWT token: " + e.getMessage());
+      log.error("Invalid JWT token: {}", e.getMessage());
     } catch (ExpiredJwtException e) {
-      System.err.println("JWT token is expired: " + e.getMessage());
+      log.error("JWT token is expired: {}", e.getMessage());
     } catch (UnsupportedJwtException e) {
-      System.err.println("JWT token is unsupported: " + e.getMessage());
+      log.error("JWT token is unsupported: {}", e.getMessage());
     } catch (IllegalArgumentException e) {
-      System.err.println("JWT claims string is empty: " + e.getMessage());
+      log.error("JWT claims string is empty: {}", e.getMessage());
     }
     return false;
   }
