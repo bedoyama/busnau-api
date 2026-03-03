@@ -209,6 +209,7 @@ This project uses several tools to ensure code quality:
 | **Spotless** | Auto-formats Java code (Google Java Style) |
 | **PMD** | Static code analysis |
 | **SpotBugs** | Static analysis looking for bugs |
+| **JaCoCo** | Code coverage reporting |
 
 ### Run checks
 
@@ -222,12 +223,18 @@ This project uses several tools to ensure code quality:
   ./gradlew pmdMain        # Run PMD analysis
   ./gradlew spotbugsMain   # Run SpotBugs analysis
   ./gradlew spotlessCheck  # Check code formatting
+  ./gradlew jacocoTestReport # Generate coverage report
   ```
 
 - **Fix formatting issues automatically**:
   ```bash
   ./gradlew spotlessApply
   ```
+
+### Code Coverage
+
+After running tests or the full check, view the HTML coverage report at:
+`build/reports/jacoco/test/html/index.html`
 
 ---
 
