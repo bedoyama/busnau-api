@@ -5,6 +5,10 @@ import com.bedoyarama.busnau.entity.RefreshToken;
 import com.bedoyarama.busnau.entity.User;
 import com.bedoyarama.busnau.repository.RefreshTokenRepository;
 import com.bedoyarama.busnau.service.UserService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
 import java.time.Instant;
 import java.util.HashMap;
@@ -51,6 +55,22 @@ public class AuthController {
     this.userDetailsService = userDetailsService;
   }
 
+  @Operation(
+      summary = "Authenticate user",
+      responses = {
+        @ApiResponse(
+            responseCode = "200",
+            description = "User authenticated successfully",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = Map.class))),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid username or password",
+            content = @Content),
+        @ApiResponse(responseCode = "500", description = "Internal server error", content = @Content)
+      })
   @PostMapping("/login")
   public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
     Authentication authentication =
@@ -83,6 +103,22 @@ public class AuthController {
     return ResponseEntity.ok(response);
   }
 
+  @Operation(
+      summary = "Refresh access token",
+      responses = {
+        @ApiResponse(
+            responseCode = "200",
+            description = "Access token refreshed successfully",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = Map.class))),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid or expired refresh token",
+            content = @Content),
+        @ApiResponse(responseCode = "500", description = "Internal server error", content = @Content)
+      })
   @PostMapping("/refresh")
   public ResponseEntity<?> refreshToken(@Valid @RequestBody RefreshRequest refreshRequest) {
     logger.info("Refresh token request received: {}", refreshRequest.getRefreshToken());

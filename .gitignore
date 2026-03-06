@@ -42,3 +42,4 @@ src/main/resources/application-local.properties
 
 ### Generated files ###
 postman/myapp-collection*
+postman/swagger.json

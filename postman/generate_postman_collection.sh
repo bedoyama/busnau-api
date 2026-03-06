@@ -5,13 +5,10 @@
 set -e  # Exit on any error
 
 echo "Generating OpenAPI JSON from localhost:8080..."
-curl -s http://localhost:8080/v3/api-docs > temp.json
+curl -s http://localhost:8080/v3/api-docs > swagger.json
 
 echo "Converting to Postman collection..."
-npx openapi-to-postmanv2 -s temp.json -o myapp-collection.json -p -O folderStrategy=Tags
-
-echo "Cleaning up temp file..."
-rm temp.json
+npx openapi-to-postmanv2 -s swagger.json -o myapp-collection.json -p -O folderStrategy=Tags
 
 echo "Transforming collection for environment variables and auth..."
 python3 postman/transform_to_postman.py myapp-collection.json

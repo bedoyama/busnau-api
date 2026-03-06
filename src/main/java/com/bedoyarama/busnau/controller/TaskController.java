@@ -5,6 +5,11 @@ import com.bedoyarama.busnau.entity.Task;
 import com.bedoyarama.busnau.entity.User;
 import com.bedoyarama.busnau.service.TaskService;
 import com.bedoyarama.busnau.service.UserService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
 import java.time.LocalDate;
 import java.util.List;
@@ -29,6 +34,12 @@ public class TaskController {
     this.userService = userService;
   }
 
+  @Operation(summary = "Create a new task")
+  @ApiResponse(
+      responseCode = "200",
+      description = "Task created successfully",
+      content =
+          @Content(mediaType = "application/json", schema = @Schema(implementation = Task.class)))
   @PostMapping
   public ResponseEntity<Task> createTask(@RequestBody @Valid CreateTaskRequest request) {
     logger.info("Creating task: {}", request.getTitle());
@@ -66,6 +77,13 @@ public class TaskController {
     return ResponseEntity.ok(savedTask);
   }
 
+  @Operation(summary = "Get a task by ID")
+  @ApiResponse(
+      responseCode = "200",
+      description = "Task found",
+      content =
+          @Content(mediaType = "application/json", schema = @Schema(implementation = Task.class)))
+  @ApiResponse(responseCode = "404", description = "Task not found", content = @Content)
   @GetMapping("/{id}")
   public ResponseEntity<Task> getTaskById(@PathVariable Long id) {
     logger.info("Fetching task by ID: {}", id);
@@ -86,6 +104,14 @@ public class TaskController {
     }
   }
 
+  @Operation(summary = "Get all tasks")
+  @ApiResponse(
+      responseCode = "200",
+      description = "Tasks retrieved successfully",
+      content =
+          @Content(
+              mediaType = "application/json",
+              array = @ArraySchema(schema = @Schema(implementation = Task.class))))
   @GetMapping
   public ResponseEntity<List<Task>> getAllTasks() {
     User currentUser = getCurrentUser();
@@ -102,6 +128,15 @@ public class TaskController {
     }
   }
 
+  @Operation(summary = "Get tasks by user ID")
+  @ApiResponse(
+      responseCode = "200",
+      description = "Tasks retrieved successfully",
+      content =
+          @Content(
+              mediaType = "application/json",
+              array = @ArraySchema(schema = @Schema(implementation = Task.class))))
+  @ApiResponse(responseCode = "403", description = "Access denied", content = @Content)
   @GetMapping("/user/{userId}")
   public ResponseEntity<List<Task>> getTasksByUserId(@PathVariable Long userId) {
     User currentUser = getCurrentUser();
@@ -124,6 +159,14 @@ public class TaskController {
     return ResponseEntity.ok(tasks);
   }
 
+  @Operation(summary = "Get tasks by completed status")
+  @ApiResponse(
+      responseCode = "200",
+      description = "Tasks retrieved successfully",
+      content =
+          @Content(
+              mediaType = "application/json",
+              array = @ArraySchema(schema = @Schema(implementation = Task.class))))
   @GetMapping("/completed/{completed}")
   public ResponseEntity<List<Task>> getTasksByCompleted(@PathVariable Boolean completed) {
     logger.info("Fetching tasks with completed status: {} for current user", completed);
@@ -137,6 +180,15 @@ public class TaskController {
     return ResponseEntity.ok(tasks);
   }
 
+  @Operation(summary = "Get tasks by user ID and date range")
+  @ApiResponse(
+      responseCode = "200",
+      description = "Tasks retrieved successfully",
+      content =
+          @Content(
+              mediaType = "application/json",
+              array = @ArraySchema(schema = @Schema(implementation = Task.class))))
+  @ApiResponse(responseCode = "403", description = "Access denied", content = @Content)
   @GetMapping("/user/{userId}/date-range")
   public ResponseEntity<List<Task>> getTasksByUserIdAndDateRange(
       @PathVariable Long userId, @RequestParam LocalDate start, @RequestParam LocalDate end) {
@@ -154,6 +206,9 @@ public class TaskController {
     return ResponseEntity.ok(tasks);
   }
 
+  @Operation(summary = "Delete a task")
+  @ApiResponse(responseCode = "204", description = "Task deleted successfully")
+  @ApiResponse(responseCode = "404", description = "Task not found", content = @Content)
   @DeleteMapping("/{id}")
   public ResponseEntity<Void> deleteTask(@PathVariable Long id) {
     logger.info("Deleting task with ID: {}", id);

@@ -3,6 +3,11 @@ package com.bedoyarama.busnau.controller;
 import com.bedoyarama.busnau.entity.Role;
 import com.bedoyarama.busnau.entity.User;
 import com.bedoyarama.busnau.service.UserService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
 import java.util.List;
 import java.util.Optional;
@@ -24,6 +29,13 @@ public class UserController {
     this.userService = userService;
   }
 
+  @Operation(summary = "Create a new user")
+  @ApiResponse(
+      responseCode = "200",
+      description = "User created successfully",
+      content =
+          @Content(mediaType = "application/json", schema = @Schema(implementation = User.class)))
+  @ApiResponse(responseCode = "400", description = "Invalid user input")
   @PostMapping
   public ResponseEntity<User> createUser(@Valid @RequestBody CreateUserRequest request) {
     logger.info("Creating user: {}", request.getUsername());
@@ -64,6 +76,14 @@ public class UserController {
     return ResponseEntity.ok(savedUser);
   }
 
+  @Operation(summary = "Get a user by ID")
+  @ApiResponse(
+      responseCode = "200",
+      description = "User found",
+      content =
+          @Content(mediaType = "application/json", schema = @Schema(implementation = User.class)))
+  @ApiResponse(responseCode = "403", description = "Forbidden", content = @Content)
+  @ApiResponse(responseCode = "404", description = "User not found", content = @Content)
   @GetMapping("/{id}")
   public ResponseEntity<User> getUserById(@PathVariable Long id) {
     logger.info("Fetching user by ID: {}", id);
@@ -81,6 +101,14 @@ public class UserController {
     }
   }
 
+  @Operation(summary = "Get a user by username")
+  @ApiResponse(
+      responseCode = "200",
+      description = "User found",
+      content =
+          @Content(mediaType = "application/json", schema = @Schema(implementation = User.class)))
+  @ApiResponse(responseCode = "403", description = "Forbidden", content = @Content)
+  @ApiResponse(responseCode = "404", description = "User not found", content = @Content)
   @GetMapping("/username/{username}")
   public ResponseEntity<User> getUserByUsername(@PathVariable String username) {
     logger.info("Fetching user by username: {}", username);
@@ -98,6 +126,15 @@ public class UserController {
     }
   }
 
+  @Operation(summary = "Get all users")
+  @ApiResponse(
+      responseCode = "200",
+      description = "List of users",
+      content =
+          @Content(
+              mediaType = "application/json",
+              array = @ArraySchema(schema = @Schema(implementation = User.class))))
+  @ApiResponse(responseCode = "403", description = "Forbidden", content = @Content)
   @GetMapping
   public ResponseEntity<List<User>> getAllUsers() {
     logger.info("Fetching all users");
@@ -110,6 +147,9 @@ public class UserController {
     return ResponseEntity.ok(users);
   }
 
+  @Operation(summary = "Delete a user by ID")
+  @ApiResponse(responseCode = "204", description = "User deleted successfully")
+  @ApiResponse(responseCode = "403", description = "Forbidden", content = @Content)
   @DeleteMapping("/{id}")
   public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
     logger.info("Deleting user with ID: {}", id);
